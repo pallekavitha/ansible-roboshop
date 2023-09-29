@@ -4,18 +4,18 @@
   tasks:
   - name: setup NPM source
     ansible.builtin.shell: "curl -sL https://rpm.nodesource.com/setup_lts.x | bash"
-  
+
   - name: Install NodeJS
     ansible.builtin.yum:
       name: nodejs
       state: installed
-  
+
   - name: check roboshop user exist or not
     ansible.builtin.command: id roboshop
     register: out #output is variable name
     ignore_errors: true
-  
-  - when: out.rc !=0
+
+  - when: out.rc != 0
     name: create user roboshop
     become: yes # we need sudo access for this task only
     ansible.builtin.user:
@@ -57,7 +57,7 @@
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
 
-  - name: daemon reload
+  - name: deamon reload
     ansible.builtin.systemd:
       daemon_reload: true
 
@@ -73,7 +73,7 @@
 
   - name: load catalogue data
     ansible.builtin.command: mongo --host mongodb.joindevops.live < /app/schema/catalogue.js
-    
+
   - name: restart catalogue
     ansible.builtin.service:
       name: catalogue
